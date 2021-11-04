@@ -36,7 +36,17 @@ function! s:initRpc()
 endfunction
 
 function! s:configureCommands()
-  command! -nargs=0 Test :call rpcnotify(s:myvim_jobid, "Test")
+  command! -nargs=* Test :call s:test(<f-args>)
 endfunction
+
+function! s:test(...)
+    let args = ''
+    for i in a:000
+        let args = args . ',' . i " let is needed, dot will cast int to string
+    endfor
+    let cmd = 'rpcnotify(' . s:myvim_jobid . ',"Test"'. args . ')' " call is not needed
+    call eval(cmd)
+endfunction
+
 
 call s:connect()

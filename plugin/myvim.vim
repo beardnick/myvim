@@ -19,7 +19,7 @@ function! s:connect()
     echoerr "myvim: rpc process is not executable"
   else
     " Mutate our jobId variable to hold the channel ID
-    let s:myvim_jobid = id 
+    let s:myvim_jobid = id
     call s:configureCommands()
 
   endif
@@ -36,17 +36,16 @@ function! s:initRpc()
 endfunction
 
 function! s:configureCommands()
-  command! -nargs=* Test :call s:test(<f-args>)
+  command! -nargs=* Test :call s:rpcnotify_args('Test',<f-args>)
 endfunction
 
-function! s:test(...)
+function! s:rpcnotify_args(func,...)
     let args = ''
     for i in a:000
         let args = args . ',' . i " let is needed, dot will cast int to string
     endfor
-    let cmd = 'rpcnotify(' . s:myvim_jobid . ',"Test"'. args . ')' " call is not needed
+    let cmd = 'rpcnotify(' . s:myvim_jobid . ',"'. a:func .'"'. args . ')' " call is not needed
     call eval(cmd)
 endfunction
-
 
 call s:connect()

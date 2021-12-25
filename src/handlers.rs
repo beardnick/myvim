@@ -2,7 +2,7 @@ use crate::plugin::Plugin;
 use neovim_lib::{NeovimApi, Value};
 
 pub fn register(plugin:  &mut Plugin){
-    plugin.Handle(String::from("Test"),sum);
+    plugin.handle(String::from("Test"),sum);
 }
 
 pub fn sum(p : &mut Plugin, args :Vec<Value>){

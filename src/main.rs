@@ -1,12 +1,13 @@
 mod plugin;
 mod handlers;
+mod myplug;
+
 
 use plugin::Plugin;
-use neovim_lib::NeovimApi;
 use crate::handlers::register;
 
 fn main() {
-    let mut plugin = Plugin::New();
+    let mut plugin = Plugin::new();
     register(&mut plugin);
-    plugin.Start();
+    plugin.start();
 }

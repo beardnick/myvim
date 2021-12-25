@@ -1,4 +1,4 @@
-use neovim_lib::{Neovim, NeovimApi, Session, Value};
+use neovim_lib::{Neovim, Session, Value};
 use std::collections::HashMap;
 
 pub struct Plugin {
@@ -7,20 +7,20 @@ pub struct Plugin {
 }
 
 impl Plugin {
-    pub fn New() -> Plugin {
+    pub fn new() -> Plugin {
         let session = Session::new_parent().unwrap();
         let nvim = Neovim::new(session);
         let handlers = HashMap::new();
         return Plugin { nvim, handlers };
     }
-    pub fn Start(&mut self) {
+    pub fn start(&mut self) {
         let recv = self.nvim.session.start_event_loop_channel();
         for (event, values) in recv {
             let f = self.handlers[&event];
             f(self,values);
         }
     }
-    pub fn Handle(&mut self, msg: String, handler: fn(&mut Plugin,Vec<Value>)) {
+    pub fn handle(&mut self, msg: String, handler: fn(&mut Plugin,Vec<Value>)) {
         self.handlers.insert(msg, handler);
     }
 }

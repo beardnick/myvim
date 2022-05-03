@@ -1,47 +1,36 @@
-use core::num;
+mod error;
+mod plug;
+mod xtokio;
 
-use mlua::Lua;
-use mlua::chunk;
 use mlua::prelude::*;
+use mlua::Lua;
 
-// 可以正常使用
-fn hello(lua:&Lua,name:String) -> LuaResult<LuaTable> {
-    let t = lua.create_table()?;
-    t.set("name",name.clone())?;
-    let _globals = lua.globals(); // why globals
-    lua.load(chunk!{
-        print("Hello " .. $name)
-    }).exec()?;
-    Ok(t)
+use crate::plug::github;
+
+//lua print(vim.inspect(require'myvim'.get_tags('neoclide/coc.nvim')))
+fn get_tags(lua: &Lua, repo: String) -> LuaResult<Vec<String>> {
+    let result = github::repo(repo.as_str());
+    let (owner, rep) = match result {
+        Ok((owner, rep)) => (owner, rep),
+        Err(e) => {
+            return Ok(Vec::new());
+        }
+    };
+    let tags = tokio_block!(github::get_tags(owner, rep));
+    let tags = match tags {
+        Ok(tags) => tags,
+        Err(e) => {
+            return Ok(Vec::new());
+        }
+    };
+    Ok(tags
+        .into_iter()
+        .map(|tag| tag.name)
+        .collect::<Vec<String>>())
 }
-
-// cannot use in neovim
-// not equivalent to load lua chunk
-//fn hello(lua:&Lua,name:String) -> LuaResult<()> {
-//    print!("Hello {}",name); //  print to stdout not equal to load lua chunk
-//    println!("Hello {}",name);
-//    Ok(())
-//}
-
-// require'myvim'.sum({1,2,3})
-fn sum(_lua:&Lua,numbers:Vec<i32>) -> LuaResult<i32> {
-    Ok(numbers.iter().sum())
-}
-
-// require'myvim'.product({1,2,3})
-fn product(_lua:&Lua,numbers:Vec<i32>) -> LuaResult<i32> {
-    Ok(numbers.iter().product())
-}
-
 
 #[mlua::lua_module]
 fn myvim(lua: &Lua) -> LuaResult<LuaTable> {
     let exports = lua.create_table()?;
-    exports.set("hello",lua.create_function(hello)?)?;
-    lua.create_table_from([
-                          ("hello",lua.create_function(hello)?),
-                          ("sum",lua.create_function(sum)?),
-                          ("product",lua.create_function(product)?),
-                          ])
-
+    lua.create_table_from([("get_tags", lua.create_function(get_tags)?)])
 }

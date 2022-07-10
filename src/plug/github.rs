@@ -1,3 +1,4 @@
+use log::{info, warn};
 use octocrab::models;
 use octocrab::models::repos::Tag;
 use octocrab::{Error, Page};
@@ -24,7 +25,9 @@ async fn get_repo_tags(owner: &str, repo: &str) -> Result<Vec<Tag>, Error> {
 pub async fn get_tags(repo: &str) -> Vec<String> {
     let (owner, repo) = match repository(repo) {
         Ok((owner, repo)) => (owner, repo),
-        Err(_) => {
+        // TODO: log error 22-05-03 //
+        Err(e) => {
+            warn!("{:?}", e);
             return vec![];
         }
     };

@@ -6,7 +6,6 @@ mod client;
 
 use std::cell::RefCell;
 use std::iter::FromIterator;
-use std::os::linux::raw::stat;
 use std::rc::Rc;
 
 use log::{info, LevelFilter};
@@ -57,7 +56,7 @@ fn myvim() -> oxi::Result<Dictionary> {
     // let client = Rc::new(Client { conf: Config { log_dir: String::from("/tmp/myvim.log") } });
 
     // 使用&RefCell<Client>可以通过编译,setup后可以修改
-    let mut client = RefCell::new(Client { conf: Config { log_dir: String::from("/tmp/myvim.log") } });
+    let mut client = RefCell::new(Client::default());
 
     // 使用&client后不能,使用&mut client后闭包变成FnOnce,无法通过编译
     // let mut client = Client { conf: Config { log_dir: String::from("/tmp/myvim.log") } };

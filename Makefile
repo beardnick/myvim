@@ -1,8 +1,6 @@
 debug:
-	cargo build
-	bash install.sh debug
+	bash build.sh debug
 
 release:
-	cargo build --release
-	bash install.sh release
+	bash build.sh release
 

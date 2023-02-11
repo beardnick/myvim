@@ -14,11 +14,11 @@ octocrab = "0.12"
 futures = "0.3"
 tokio = { version = "1.14.0", features = ["full"] }
 #async-std = { version = "1", features = ["attributes", "tokio1"] }
-mlua = {version = "*", features = ["luajit", "vendored", "module", "macros","serialize"]}
+mlua = { version = "*", features = ["luajit", "vendored", "module", "macros", "serialize"] }
 #async-std = { version = "1.2.0", features = ["attributes"] }
 log = "0.4"
 simple-logging = "2.0.2"
 serde_path_to_error = "0.1"
 
-serde = {version = "1.0", features = ["derive"]}
-nvim-oxi = {git = "https://github.com/noib3/nvim-oxi"}
+serde = { version = "1.0", features = ["derive"] }
+nvim-oxi = { git = "https://github.com/noib3/nvim-oxi", features = ["neovim-0-8"] }

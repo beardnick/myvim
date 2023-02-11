@@ -31,7 +31,7 @@ function build_linux() {
   [[ -d lua ]] || mkdir lua
   cp target/"${PROFILE}"/lib*.so lua/
   for f in lua/lib*.so; do
-    t=${f/#lib/}
+    t=${f/lib/}
     [[ "${f}" != "" ]] &&
       echo "mv ${f} ${t}" &&
       mv "${f}" "${t}"
@@ -56,7 +56,7 @@ function build_macos() {
   [[ -d lua ]] || mkdir lua
   cp target/"${PROFILE}"/lib*.dylib lua/
   for f in lua/lib*.dylib; do
-    t=${f/#lib/}
+    t=${f/lib/}
     t=${t/%dylib/so}
     [[ "${f}" != "" ]] &&
       echo "mv ${f} ${t}" &&

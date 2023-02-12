@@ -9,6 +9,7 @@ use nvim_oxi::serde::Deserializer;
 #[derive(Debug, Deserialize)]
 pub struct Config {
     pub log_dir: String,
+    pub plug_dir: String,
 }
 
 impl FromObject for Config {
@@ -29,6 +30,7 @@ impl Default for Config {
     fn default() -> Self {
         return Config {
             log_dir: String::from("/tmp/myvim.log"),
+            plug_dir: String::from("~/.config/myrust"),
         };
     }
 }

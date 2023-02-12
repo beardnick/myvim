@@ -22,3 +22,6 @@ serde_path_to_error = "0.1"
 
 serde = { version = "1.0", features = ["derive"] }
 nvim-oxi = { git = "https://github.com/noib3/nvim-oxi", features = ["neovim-0-8"] }
+shellexpand = "3.0.0"
+git2 = "0.16.1"
+lazy_static = "1.4.0"

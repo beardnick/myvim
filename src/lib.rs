@@ -1,3 +1,5 @@
+extern crate core;
+
 mod config;
 mod error;
 mod plug;
